@@ -19,10 +19,18 @@ interface ExportMenuProps {
 
 export default function ExportMenu({ note }: ExportMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
 
-  const handleExportAllNotes = () => {
-    exportAllNotesAsMarkdown()
-    setIsOpen(false)
+  const handleExportAllNotes = async () => {
+    setIsExporting(true)
+    try {
+      await exportAllNotesAsMarkdown()
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExporting(false)
+      setIsOpen(false)
+    }
   }
 
   const handleExportCurrentNote = () => {
@@ -44,9 +52,13 @@ export default function ExportMenu({ note }: ExportMenuProps) {
         <div className="px-2 py-1.5 text-sm font-medium text-gray-500">Export Options</div>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={handleExportAllNotes} className="flex items-center gap-2 cursor-pointer">
+        <DropdownMenuItem
+          onClick={handleExportAllNotes}
+          className="flex items-center gap-2 cursor-pointer"
+          disabled={isExporting}
+        >
           <FileDown className="h-4 w-4 text-[#007AFF]" />
-          <span>Export All Notes</span>
+          <span>{isExporting ? "Exporting..." : "Export All Notes (ZIP)"}</span>
         </DropdownMenuItem>
 
         {note && (

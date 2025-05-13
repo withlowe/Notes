@@ -17,6 +17,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
   const { theme, setTheme } = useTheme()
   const [themeLabel, setThemeLabel] = useState("System")
 
@@ -26,8 +27,15 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     else setThemeLabel("System")
   }, [theme])
 
-  const handleExportNotes = () => {
-    exportAllNotesAsMarkdown()
+  const handleExportNotes = async () => {
+    setIsExporting(true)
+    try {
+      await exportAllNotesAsMarkdown()
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const handleThemeChange = () => {
@@ -86,8 +94,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   />
                   <SidebarItem
                     icon={<FileDown className="h-5 w-5 text-primary" />}
-                    label="Export All Notes"
+                    label="Export All Notes (ZIP)"
                     onClick={handleExportNotes}
+                    disabled={isExporting}
                   />
                 </div>
               </div>

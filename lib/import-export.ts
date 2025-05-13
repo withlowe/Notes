@@ -1,5 +1,6 @@
 import type { Note } from "./types"
 import { getNotes, createNote } from "./notes-service"
+import JSZip from "jszip"
 
 // Export a single note as a markdown file
 export function exportNoteAsMarkdown(note: Note): void {
@@ -16,8 +17,8 @@ export function exportNoteAsMarkdown(note: Note): void {
   linkElement.click()
 }
 
-// Export all notes as individual markdown files in a zip
-export function exportAllNotesAsMarkdown(): void {
+// Export all notes as a zip file containing markdown files
+export async function exportAllNotesAsMarkdown(): Promise<void> {
   const notes = getNotes()
 
   if (notes.length === 0) {
@@ -25,11 +26,38 @@ export function exportAllNotesAsMarkdown(): void {
     return
   }
 
-  // Export each note individually for now
-  // In a real app, we would use a library like JSZip to create a zip file
-  notes.forEach((note) => {
-    exportNoteAsMarkdown(note)
-  })
+  try {
+    // Create a new JSZip instance
+    const zip = new JSZip()
+
+    // Add each note as a markdown file to the zip
+    notes.forEach((note) => {
+      const content = `# ${note.title || "Untitled Note"}\n\n${note.content}`
+      const fileName = note.title
+        ? `${note.title.replace(/[^a-z0-9]/gi, "-").toLowerCase()}.md`
+        : `note-${note.id.slice(0, 8)}.md`
+
+      zip.file(fileName, content)
+    })
+
+    // Generate the zip file
+    const zipBlob = await zip.generateAsync({ type: "blob" })
+
+    // Create a download link for the zip file
+    const url = URL.createObjectURL(zipBlob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `notes-export-${new Date().toISOString().slice(0, 10)}.zip`
+    document.body.appendChild(link)
+    link.click()
+
+    // Clean up
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  } catch (error) {
+    console.error("Error exporting notes:", error)
+    alert("Failed to export notes. Please try again.")
+  }
 }
 
 // Import a markdown file as a new note
