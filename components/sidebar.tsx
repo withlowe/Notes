@@ -7,7 +7,7 @@ import { FileUp, FileDown, Database, Trash2, Moon, Sun, Info, Laptop, Settings, 
 import { Button } from "@/components/ui/button"
 import { useTheme } from "@/components/theme-provider"
 import ImportDialog from "@/components/import-dialog"
-import { exportNotesToJSON } from "@/lib/import-export"
+import { exportAllNotesAsMarkdown } from "@/lib/import-export"
 import { cn } from "@/lib/utils"
 
 interface SidebarProps {
@@ -27,7 +27,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }, [theme])
 
   const handleExportNotes = () => {
-    exportNotesToJSON()
+    exportAllNotesAsMarkdown()
   }
 
   const handleThemeChange = () => {
@@ -65,7 +65,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center">
               <Settings className="h-6 w-6 text-primary mr-2" />
-              <h2 className="text-xl font-semibold text-foreground">Settings</h2>
+              <h2 className="text-[18px] font-semibold text-foreground">Settings</h2>
             </div>
             <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={onClose}>
               <X className="h-6 w-6" />
@@ -77,11 +77,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex-grow overflow-auto p-4">
             <div className="space-y-6">
               <div className="bg-background rounded-lg overflow-hidden shadow-sm">
-                <h3 className="text-sm font-medium text-muted-foreground px-4 py-2 bg-muted/50">Notes</h3>
+                <h3 className="text-[11px] font-medium text-muted-foreground px-4 py-2 bg-muted/50">Notes</h3>
                 <div className="divide-y divide-border">
                   <SidebarItem
                     icon={<FileUp className="h-5 w-5 text-primary" />}
-                    label="Import Notes"
+                    label="Import Note"
                     onClick={() => setIsImportDialogOpen(true)}
                   />
                   <SidebarItem
@@ -93,7 +93,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
 
               <div className="bg-background rounded-lg overflow-hidden shadow-sm">
-                <h3 className="text-sm font-medium text-muted-foreground px-4 py-2 bg-muted/50">Preferences</h3>
+                <h3 className="text-[11px] font-medium text-muted-foreground px-4 py-2 bg-muted/50">Preferences</h3>
                 <div className="divide-y divide-border">
                   <SidebarItem
                     icon={<Database className="h-5 w-5 text-green-600" />}
@@ -110,7 +110,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
 
               <div className="bg-background rounded-lg overflow-hidden shadow-sm">
-                <h3 className="text-sm font-medium text-muted-foreground px-4 py-2 bg-muted/50">Danger Zone</h3>
+                <h3 className="text-[11px] font-medium text-muted-foreground px-4 py-2 bg-muted/50">Danger Zone</h3>
                 <div className="divide-y divide-border">
                   <SidebarItem
                     icon={<Trash2 className="h-5 w-5 text-destructive" />}
@@ -158,9 +158,9 @@ function SidebarItem({ icon, label, value, onClick, danger = false, disabled = f
     >
       <div className="flex items-center">
         <div className="mr-3">{icon}</div>
-        <span className="font-medium">{label}</span>
+        <span className="font-medium text-[15px]">{label}</span>
       </div>
-      {value && <span className="text-muted-foreground text-sm">{value}</span>}
+      {value && <span className="text-muted-foreground text-[11px]">{value}</span>}
     </button>
   )
 }

@@ -12,9 +12,9 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { importNotesFromJSON, importTextAsNote } from "@/lib/import-export"
+import { importMarkdownAsNote } from "@/lib/import-export"
 import { useRouter } from "next/navigation"
-import { FileTextIcon as DocumentText, FileJson } from "lucide-react"
+import { FileTextIcon as DocumentText } from "lucide-react"
 
 interface ImportDialogProps {
   isOpen: boolean
@@ -37,21 +37,8 @@ export default function ImportDialog({ isOpen, onClose }: ImportDialogProps) {
     const file = files[0]
 
     try {
-      if (file.type === "application/json") {
-        const result = await importNotesFromJSON(file)
-        if (result.success) {
-          setImportStatus({
-            message: `Successfully imported ${result.count} note${result.count !== 1 ? "s" : ""}`,
-            isError: false,
-          })
-        } else {
-          setImportStatus({
-            message: "Failed to import notes. Make sure the file is a valid notes backup.",
-            isError: true,
-          })
-        }
-      } else if (file.type === "text/plain") {
-        const result = await importTextAsNote(file)
+      if (file.name.endsWith(".md") || file.type === "text/markdown") {
+        const result = await importMarkdownAsNote(file)
         if (result.success) {
           setImportStatus({
             message: "Successfully imported note",
@@ -73,7 +60,7 @@ export default function ImportDialog({ isOpen, onClose }: ImportDialogProps) {
         }
       } else {
         setImportStatus({
-          message: "Unsupported file type. Please use .json or .txt files.",
+          message: "Unsupported file type. Please use .md files.",
           isError: true,
         })
       }
@@ -94,10 +81,8 @@ export default function ImportDialog({ isOpen, onClose }: ImportDialogProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md rounded-xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-gray-900">Import Notes</DialogTitle>
-          <DialogDescription className="text-gray-600">
-            Import notes from a backup file or create a new note from a text file.
-          </DialogDescription>
+          <DialogTitle className="text-xl font-semibold text-gray-900">Import Note</DialogTitle>
+          <DialogDescription className="text-gray-600">Import a markdown file as a new note.</DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-1 gap-4 py-4">
@@ -105,7 +90,7 @@ export default function ImportDialog({ isOpen, onClose }: ImportDialogProps) {
             <input
               ref={fileInputRef}
               type="file"
-              accept=".json,.txt"
+              accept=".md"
               onChange={handleFileChange}
               className="hidden"
               id="file-upload"
@@ -115,16 +100,9 @@ export default function ImportDialog({ isOpen, onClose }: ImportDialogProps) {
             <div className="flex space-x-4 mb-4">
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-2">
-                  <FileJson className="h-6 w-6 text-[#007AFF]" />
-                </div>
-                <span className="text-sm text-gray-600">JSON</span>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-2">
                   <DocumentText className="h-6 w-6 text-[#007AFF]" />
                 </div>
-                <span className="text-sm text-gray-600">TXT</span>
+                <span className="text-sm text-gray-600">Markdown</span>
               </div>
             </div>
 
@@ -135,7 +113,7 @@ export default function ImportDialog({ isOpen, onClose }: ImportDialogProps) {
               {isImporting ? "Importing..." : "Select File"}
             </label>
 
-            <p className="mt-2 text-xs text-gray-500">Supports .json backup files or .txt files</p>
+            <p className="mt-2 text-xs text-gray-500">Supports .md markdown files</p>
           </div>
 
           {importStatus && (

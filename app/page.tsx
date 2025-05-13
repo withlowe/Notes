@@ -45,7 +45,7 @@ export default function Home() {
                   <Menu className="h-7 w-7" />
                   <span className="sr-only">Menu</span>
                 </Button>
-                <h1 className="text-3xl font-bold text-foreground py-4">Notes</h1>
+                <h1 className="text-[30px] font-bold text-foreground py-4">Notes</h1>
               </div>
 
               {/* Add Note Button in header - larger icon */}

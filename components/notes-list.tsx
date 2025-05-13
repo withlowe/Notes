@@ -5,7 +5,7 @@ import Link from "next/link"
 import type { Note } from "@/lib/types"
 import { getNotes, searchNotes } from "@/lib/notes-service"
 import SearchBar from "./search-bar"
-import { Calendar, ChevronRight, Search } from "lucide-react"
+import { Calendar, ChevronRight } from "lucide-react"
 
 export default function NotesList() {
   const [notes, setNotes] = useState<Note[]>([])
@@ -65,19 +65,16 @@ export default function NotesList() {
         <div className="flex flex-col items-center justify-center flex-grow py-16 text-muted-foreground">
           {isSearching ? (
             <>
-              <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-full bg-muted">
-                <Search className="h-7 w-7 text-muted-foreground" />
-              </div>
-              <p className="text-lg font-medium mb-1">No Results</p>
-              <p className="text-sm text-muted-foreground/70">No notes match "{searchQuery}"</p>
+              <p className="text-[15px] font-medium mb-1">No Results</p>
+              <p className="text-[11px] text-muted-foreground/70">No notes match "{searchQuery}"</p>
             </>
           ) : (
             <>
               <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-full bg-muted">
-                <Calendar className="h-8 w-8 text-muted-foreground" />
+                <Calendar className="h-7 w-7 text-muted-foreground" />
               </div>
-              <p className="text-lg font-medium mb-1">No Notes</p>
-              <p className="text-sm text-muted-foreground/70">Create a new note to get started</p>
+              <p className="text-[15px] font-medium mb-1">No Notes</p>
+              <p className="text-[11px] text-muted-foreground/70">Create a new note to get started</p>
             </>
           )}
         </div>
@@ -92,7 +89,7 @@ export default function NotesList() {
       </div>
 
       {isSearching && (
-        <div className="px-2 py-1 mb-3 text-sm text-muted-foreground">
+        <div className="px-2 py-1 mb-3 text-[11px] text-muted-foreground">
           {notes.length} {notes.length === 1 ? "result" : "results"} for "{searchQuery}"
         </div>
       )}
@@ -105,10 +102,10 @@ export default function NotesList() {
               <Link href={`/${note.id}`} className="flex items-center px-4 py-3 hover:bg-card/50 transition-colors">
                 <div className="flex-grow min-w-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-[17px] text-foreground truncate pr-2">
+                    <h3 className="font-medium text-[15px] text-foreground truncate pr-2">
                       {note.title || "Untitled Note"}
                     </h3>
-                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    <span className="text-[11px] text-muted-foreground whitespace-nowrap">
                       {formatDate(note.updatedAt)}
                     </span>
                   </div>

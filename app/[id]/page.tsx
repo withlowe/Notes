@@ -9,7 +9,7 @@ import { ChevronLeft, Share2, Trash2 } from "lucide-react"
 import type { Note } from "@/lib/types"
 import { deleteNote, getNote, updateNote } from "@/lib/notes-service"
 import FormattingToolbar from "@/components/formatting-toolbar"
-import { exportNoteAsText } from "@/lib/import-export"
+import { exportNoteAsMarkdown } from "@/lib/import-export"
 
 export default function NotePage() {
   const params = useParams()
@@ -71,7 +71,7 @@ export default function NotePage() {
 
   const handleExportNote = () => {
     if (note) {
-      exportNoteAsText({
+      exportNoteAsMarkdown({
         ...note,
         title,
         content,
@@ -109,7 +109,7 @@ export default function NotePage() {
               onClick={() => router.push("/")}
             >
               <ChevronLeft className="h-7 w-7" />
-              <span className="text-[17px] font-medium">Notes</span>
+              <span className="text-[15px] font-medium">Notes</span>
             </Button>
 
             <div className="flex items-center space-x-3">
@@ -154,7 +154,7 @@ export default function NotePage() {
             type="text"
             value={title}
             onChange={handleTitleChange}
-            className="w-full text-[22px] font-semibold text-foreground mt-4 mb-2 px-2 py-1 focus:outline-none focus:ring-0 rounded-md transition-colors bg-background"
+            className="w-full text-[18px] font-semibold text-foreground mt-4 mb-2 px-2 py-1 focus:outline-none focus:ring-0 rounded-md transition-colors bg-background"
             placeholder="Title"
             aria-label="Note title"
           />
@@ -165,7 +165,7 @@ export default function NotePage() {
               ref={contentRef}
               value={content}
               onChange={handleContentChange}
-              className="w-full h-[calc(100vh-150px)] px-2 py-1 text-[17px] leading-relaxed text-foreground resize-none focus:outline-none focus:ring-0 rounded-md transition-colors bg-background"
+              className="w-full h-[calc(100vh-150px)] px-2 py-1 text-[15px] leading-relaxed text-foreground resize-none focus:outline-none focus:ring-0 rounded-md transition-colors bg-background"
               placeholder="Note"
               aria-label="Note content"
               style={{

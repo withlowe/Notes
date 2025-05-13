@@ -9,8 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { FileDown, FileJson, FileText } from "lucide-react"
-import { exportNotesToJSON, exportNoteAsText } from "@/lib/import-export"
+import { FileDown, FileText } from "lucide-react"
+import { exportAllNotesAsMarkdown, exportNoteAsMarkdown } from "@/lib/import-export"
 import type { Note } from "@/lib/types"
 
 interface ExportMenuProps {
@@ -21,13 +21,13 @@ export default function ExportMenu({ note }: ExportMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleExportAllNotes = () => {
-    exportNotesToJSON()
+    exportAllNotesAsMarkdown()
     setIsOpen(false)
   }
 
   const handleExportCurrentNote = () => {
     if (note) {
-      exportNoteAsText(note)
+      exportNoteAsMarkdown(note)
     }
     setIsOpen(false)
   }
@@ -45,14 +45,14 @@ export default function ExportMenu({ note }: ExportMenuProps) {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem onClick={handleExportAllNotes} className="flex items-center gap-2 cursor-pointer">
-          <FileJson className="h-4 w-4 text-[#007AFF]" />
-          <span>Export All Notes (JSON)</span>
+          <FileDown className="h-4 w-4 text-[#007AFF]" />
+          <span>Export All Notes</span>
         </DropdownMenuItem>
 
         {note && (
           <DropdownMenuItem onClick={handleExportCurrentNote} className="flex items-center gap-2 cursor-pointer">
             <FileText className="h-4 w-4 text-[#007AFF]" />
-            <span>Export This Note (TXT)</span>
+            <span>Export This Note</span>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

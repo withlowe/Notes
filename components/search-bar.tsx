@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useRef } from "react"
-import { Search, X } from "lucide-react"
+import { X } from "lucide-react"
 
 interface SearchBarProps {
   onSearch: (query: string) => void
@@ -28,13 +28,10 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <div className="flex-grow">
       <div className="relative flex items-center rounded-lg bg-muted dark:bg-gray-800">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <Search className="h-7 w-7 text-muted-foreground" />
-        </div>
         <input
           ref={inputRef}
           type="text"
-          className="w-full pl-10 pr-10 py-2.5 rounded-lg focus:outline-none bg-transparent text-[17px] text-foreground"
+          className="w-full px-4 py-2.5 rounded-lg focus:outline-none bg-transparent text-[15px] text-foreground"
           placeholder="Search"
           value={query}
           onChange={handleChange}
@@ -46,7 +43,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             aria-label="Clear search"
           >
             <div className="bg-muted-foreground/30 rounded-full p-0.5">
-              <X className="h-6 w-6 text-background" />
+              <X className="h-5 w-5 text-background" />
             </div>
           </button>
         )}
